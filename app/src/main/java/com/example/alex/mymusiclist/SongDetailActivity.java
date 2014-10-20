@@ -1,17 +1,46 @@
 package com.example.alex.mymusiclist;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 
 
 public class SongDetailActivity extends Activity {
+    private static final String TAG = "MusicList";
+    private static final String SONG_TITLE= "song_title";
+    private static final SimpleDateFormat df =
+            new SimpleDateFormat("MMM d, yyy (EEE");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_detail);
+        Intent intent = getIntent();
+        String name = intent.getStringExtra(SONG_TITLE);
+        Song song = new MyMusicListService().findOne(name);
+        Log.d(TAG, "Passed in : " + song.getArtist());
+
+        TextView songTitle = (TextView) findViewById(R.id.textViewSongTitleText);
+        songTitle.setText(song.getName());
+
+        TextView songArtist = (TextView) findViewById(R.id.textViewSongArtistText);
+        songArtist.setText(song.getArtist());
+
+        TextView songAlbum = (TextView) findViewById(R.id.textViewSongAlbumText);
+        songAlbum.setText(song.getAlbum());
+
+        TextView songPublishedDate = (TextView) findViewById(R.id.textViewSongDateText);
+        songPublishedDate.setText(df.format(song.getPublishedDate()));
+
     }
 
 

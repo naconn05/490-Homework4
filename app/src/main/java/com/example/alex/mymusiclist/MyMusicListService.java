@@ -32,7 +32,7 @@ public class MyMusicListService {
 
     public Song findOne(String name){
         for(Song song:songs){
-            if (song.equals(name)){
+            if (song.getName().equalsIgnoreCase(name)){
                 return song;
             }
         }

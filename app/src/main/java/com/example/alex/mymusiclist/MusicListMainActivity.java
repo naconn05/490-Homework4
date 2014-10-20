@@ -1,15 +1,21 @@
 package com.example.alex.mymusiclist;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
 
 
 public class MusicListMainActivity extends Activity {
+    private static final String TAG = "MusicList";
+    private static final String SONG_TITLE = "song_title";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +24,20 @@ public class MusicListMainActivity extends Activity {
 
         ListView listView = (ListView) findViewById(R.id.listViewSong);
         List<Song> songs = new MyMusicListService().findAll();
-        SongAdapter songAdapter = new SongAdapter(this, R.layout.activity_music_list_main, songs);
+        final SongAdapter songAdapter = new SongAdapter(this, R.layout.activity_music_list_main, songs);
         listView.setAdapter(songAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Song song = (Song)songAdapter.getItem(position);
+                Log.d(TAG, "You clicked on:" + song.getName());
+
+                Intent intent = new Intent(view.getContext(), SongDetailActivity.class);
+                intent.putExtra(SONG_TITLE,song.getName());
+                startActivity(intent);
+            }
+        });
     }
 
 
